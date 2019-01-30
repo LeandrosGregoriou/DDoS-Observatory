@@ -1,0 +1,3 @@
+parse_cmd.lo: parse_cmd.c /usr/include/stdc-predef.h
+
+/usr/include/stdc-predef.h:

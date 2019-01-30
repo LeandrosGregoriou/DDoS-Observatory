@@ -1,0 +1,19 @@
+Metadata-Version: 1.1
+Name: pybgpstream
+Version: 1.2.1
+Summary: A Python interface to BGPStream
+Home-page: http://bgpstream.caida.org
+Author: Alistair King
+Author-email: bgpstream-info@caida.org
+License: GPLv2
+Description: Provides a high-level interface for live and historical BGP data analysis. PyBGPStream requires the libBGPStream C library, available at http://bgpstream.caida.org/download.
+Keywords: _pybgpstream pybgpstream bgpstream bgp mrt routeviews route-views ris routing
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: System Administrators
+Classifier: Intended Audience :: Telecommunications Industry
+Classifier: Intended Audience :: Information Technology
+Classifier: License :: OSI Approved :: GNU General Public License v2 (GPLv2)
+Classifier: Operating System :: POSIX

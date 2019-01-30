@@ -1,0 +1,17 @@
+MANIFEST.in
+README
+setup.py
+examples/topology.py
+examples/tutorial_print.py
+pybgpstream.egg-info/PKG-INFO
+pybgpstream.egg-info/SOURCES.txt
+pybgpstream.egg-info/dependency_links.txt
+pybgpstream.egg-info/top_level.txt
+src/_pybgpstream_bgpelem.c
+src/_pybgpstream_bgpelem.h
+src/_pybgpstream_bgprecord.c
+src/_pybgpstream_bgprecord.h
+src/_pybgpstream_bgpstream.c
+src/_pybgpstream_bgpstream.h
+src/_pybgpstream_module.c
+src/pyutils.h
