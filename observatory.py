@@ -13,36 +13,34 @@ import sys
 
 
 
+class DBEditor(object):
 
+	def __init__(self, db):
+		self.db = db
+		self.cursor = db.cursor()
 
-def insertRecord(prefix, prefixLength, asPAth, BGPcommunities, 
-				nextHop, collector, timestamp):
+	def insertRecord(self, prefix, prefixLength, asPath, BGPcommunities, 
+					nextHop, collector, timestamp):		
+		
+		query = "INSERT INTO recordsTable(prefix, prefixLength, asPath, \
+					BGPcommunities, nextHop, collector, timestamp)  \
+					VALUES (%s, %s, %s, %s, %s, %s, %s)" 
 				
-				db = MySQLdb.connect(host="localhost",    # your host, usually localhost
+		args = (prefix, prefixLength, asPath, BGPcommunities, nextHop, collector, timestamp)
+		
+		self.cursor.execute(query, args)
+
+		self.db.commit()
+
+				
+
+
+
+db = MySQLdb.connect(host="localhost",    # your host, usually localhost
 						     user="root",         # your username
 						     passwd="password",  # your password
 						     db="RecordsDB")        # name of the data base
-				cursor = db.cursor()
-
-				if cursor.lastrowid():
-					recordID = cursor.lastrowid() + 1
-				else:
-					recordID = 1;
-				
-				
-				query = "INSERT INTO recordsTable(recordID, prefix, prefixLength, asPAth, \
-						 BGPcommunities, nextHop, collector, timestamp)  \
-							VALUES (%s, %s, %s, %s, %s, %s, %s, %s)" 
-						
-				args = (recordID, prefix, prefixLength, asPAth, BGPcommunities, nextHop, collector, timestamp)
-				
-				cursor.execute(query, args)
-
-				db.commit()
-
-				db.close()
-
-
+db_editor = DBEditor(db)
 
 
 print '\n\n-----------------  Welcome to the DDoS Observatory  -----------------\n\n'
@@ -117,11 +115,9 @@ print "-------------------------------------------------------------------------
 print "| Project | Collector |  Type  |    Time    |  Status  | Type |  Peer Address  | Peer ASN |       Prefix       |"
 
 #for building up purposes im only allowing 100 records to be collected
-i = 0
-while (i<100):
-	# Get next record
-	# while(stream.get_next_record(rec)):
-	stream.get_next_record(rec)
+
+# Get next record
+while(stream.get_next_record(rec)):
 	# Print the record information only if it is not a valid record
 	if rec.status != "valid":
 		#print "--INVALID RECORD--"
@@ -129,7 +125,7 @@ while (i<100):
 		#print "-----------------------------"
 	else:
 		elem = rec.get_next_elem()
-		while(elem):
+		while (elem):
 			#if it contains :, if it's a IPv6, then don't include it
 			#AND the word prefix is contained within the element fields
 			#AND only include records with larger than /24 prefixes
@@ -138,10 +134,10 @@ while (i<100):
 				print '|  {:6s} | {:9s} | {:6s} | {:10d} | {:8s} '.format(rec.project, rec.collector, rec.type, rec.time, rec.status),
 				print '| {:4s} | {:14s} | {:8d} | {:18s} |'.format(elem.type, elem.peer_address, elem.peer_asn, elem.fields['prefix'])#, elem.fields, " |"
 				
-				insertRecord(str(elem.fields['prefix']), elem.fields['prefix'].split("/")[1],\
+				db_editor.insertRecord(str(elem.fields['prefix']), elem.fields['prefix'].split("/")[1],\
 						str(elem.fields['as-path']), str(elem.fields['communities']), str(elem.fields['next-hop']), rec.collector, rec.time)
-				i = i + 1
 			elem = rec.get_next_elem()
 			
 
 print ("Completed logging 100 records.")
+db_editor.db.close()
